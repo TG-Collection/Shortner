@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <h2>You are about to be redirected to:</h2>
+    <p id="url">{{ url }}</p>
+    <button class="button" onclick="redirectToURL()">Proceed</button>
+</body>
+</html>
