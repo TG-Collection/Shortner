@@ -12,7 +12,8 @@ LANDING_PAGE_ENABLED = os.getenv('LANDING_PAGE', 'ON') == 'ON'
 TIMER_ENABLED = os.getenv('TIMER_ENABLED', 'OFF') == 'ON'
 TIMER_SECONDS = int(os.getenv('TIMER_SECONDS', 5))
 
-app = Quart(__name__)
+app = Quart(__name__, template_folder='static')
+
 client = AsyncIOMotorClient(MONGO_URI)
 db = client[DATABASE_NAME]
 collection = db.shortened_urls
