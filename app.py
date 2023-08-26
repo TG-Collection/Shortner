@@ -3,10 +3,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import string
 import random
 import os
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
 
 MONGO_URI = os.getenv('MONGO_URI', '')
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'urlshortenerdb')
