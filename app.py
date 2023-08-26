@@ -8,7 +8,7 @@ import datetime
 MONGO_URI = os.getenv('MONGO_URI')
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'urlshortenerdb')
 PORT = int(os.getenv('PORT', 8080))
-LANDING_PAGE_ENABLED = os.getenv('LANDING_PAGE', 'OFF') == 'ON'
+LANDING_PAGE_ENABLED = os.getenv('LANDING_PAGE', 'ON') == 'ON'
 TIMER_ENABLED = os.getenv('TIMER_ENABLED', 'OFF') == 'ON'
 TIMER_SECONDS = int(os.getenv('TIMER_SECONDS', 5))
 
