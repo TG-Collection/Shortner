@@ -14,13 +14,13 @@
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center">
-                <h2 class="mb-4">You're almost there!</h2>
-                <p>You are about to be redirected to:</p>
-                <p class="mb-4" id="url">{{ url }}</p>
-                <button class="btn btn-primary btn-lg" onclick="redirectToURL()">Proceed to Website</button>
+    <div class="container-fluid h-100 bg-light">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-md-6 col-lg-4 text-center shadow-lg p-4 rounded bg-white">
+                <h2 class="mb-4 display-5">You're almost there!</h2>
+                <p class="lead mb-4">You are about to be redirected to:</p>
+                <p class="mb-4 url-box" id="url">{{ url }}</p>
+                <button class="btn btn-primary btn-lg w-100" onclick="redirectToURL()">Proceed to Website</button>
             </div>
         </div>
     </div>
