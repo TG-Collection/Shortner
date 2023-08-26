@@ -3,126 +3,215 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrimeHub URL Shortener</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        /* General Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Background styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #A8E6CF, #11999E);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .profile-container {
+            padding: 50px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: float 3s infinite, springy 3s infinite alternate;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #2a2a2a;
+        }
+
+        p {
+            font-weight: 300;
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        /* Continuous Springy Effect */
+        @keyframes springy {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Continuous Floating Effect */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Extra styles for landing page */
+        .info {
+            margin-bottom: 20px;
+        }
+
+        .action {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #11999E;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background-color 0.2s ease;
+            transform: scale(0.98);
+        }
+
+        .btn-primary:hover {
+            background-color: #0D7A80;
+            transform: scale(1);
+        }
+
+        /* Responsive styles for mobile devices */
+        @media only screen and (max-width: 600px) {
+            .profile-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 15px;
+            }
+
+            p {
+                font-size: 0.95em;
+                margin-bottom: 25px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <div id="particles-js"></div>
-    <div class="overlay">
-        <div class="container d-flex h-100">
-            <div class="row align-self-center w-100">
-                <div class="col-md-6 mx-auto">
-                    <div class="card shadow-lg animated fadeIn">
-                        <div class="card-header bg-primary text-white">
-                            <h2 class="card-title mb-0">PrimeHub URL Shortener</h2>
-                        </div>
-                        <div class="card-body text-center p-5">
-                            <p class="lead mb-4">You are about to be redirected.</p>
-                            <p class="info-text"><strong>Creation Time:</strong> {{ creation_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                            <p class="info-text"><strong>Views:</strong> {{ views }}</p>
-                            <p class="info-text">For support, contact <a href="mailto:support@primehub.com">support@primehub.com</a></p>
-                            <p id="timer" class="mb-4"></p>
-                            <button id="proceed-btn" class="btn btn-primary btn-lg w-100" onclick="redirectToURL()">Proceed to Website</button>
-                        </div>
-                    </div>
-                    <footer class="text-center mt-4">
-                        <p>&copy; 2023 PrimeHub</p>
-                    </footer>
-                </div>
-            </div>
+    <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <section class="profile-container">
+        <h1>PrimeHub URL Shortener</h1>
+        <p>You are about to be redirected.</p>
+        <div class="info">
+            <p><strong>Creation Time:</strong> {{ creation_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p><strong>Views:</strong> {{ views }}</p>
+            <p>For support, contact <a href="mailto:support@primehub.com">support@primehub.com</a></p>
         </div>
-    </div>
+        <div class="action">
+            <button id="proceed-btn" class="btn btn-primary" onclick="redirectToURL()">Proceed to Website</button>
+        </div>
+    </section>
 
     <script>
-        // Initialize Particle.js
         particlesJS('particles-js', {
             particles: {
-                number: {
-                    value: 80,
-                    density: { enable: true, value_area: 800 }
-                },
-                color: { value: '#ffffff' },
+                number: { value: 80, density: { enable: true, value_area: 1000 } },
+                color: { value: "#A8E6CF" },
                 shape: {
-                    type: 'circle',
-                    stroke: { width: 0, color: '#000000' },
-                    polygon: { nb_sides: 5 },
+                    type: "circle",
+                    polygon: { nb_sides: 5 }
                 },
                 opacity: {
-                    value: 0.5,
-                    random: false,
-                    anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false }
+                    value: 0.6,
+                    random: true,
+                    anim: { enable: true, speed: 0.5, opacity_min: 0.1, sync: false }
                 },
                 size: {
-                    value: 3,
+                    value: 4,
                     random: true,
-                    anim: { enable: false, speed: 40, size_min: 0.1, sync: false }
+                    anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
                 },
                 line_linked: {
                     enable: true,
-                    distance: 150,
-                    color: '#ffffff',
-                    opacity: 0.4,
-                    width: 1
+                    distance: 180,
+                    color: "#11999E",
+                    opacity: 0.6,
+                    width: 1.5
                 },
                 move: {
                     enable: true,
-                    speed: 6,
-                    direction: 'none',
-                    random: false,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false,
-                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
+                    speed: 2,
+                    bounce: true
                 }
             },
             interactivity: {
-                detect_on: 'canvas',
+                detect_on: "canvas",
                 events: {
-                    onhover: { enable: true, mode: 'repulse' },
-                    onclick: { enable: true, mode: 'push' },
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
                     resize: true
-                },
-                modes: {
-                    grab: { distance: 400, line_linked: { opacity: 1 } },
-                    bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
-                    repulse: { distance: 200, duration: 0.4 },
-                    push: { particles_nb: 4 },
-                    remove: { particles_nb: 2 }
                 }
-            }
+            },
+            retina_detect: true
         });
-
-        // Timer logic
-        var timerEnabled = {{ "true" if timer_enabled else "false" }};
-        var timerSeconds = {{ timer_seconds }};
-
-        if (timerEnabled) {
-            document.getElementById('proceed-btn').style.display = "none";  // Hide the button initially
-            var timerDisplay = document.getElementById('timer');
-            timerDisplay.textContent = "Redirecting in " + timerSeconds + " seconds...";
-
-            var countdownInterval = setInterval(function() {
-                timerSeconds--;
-                timerDisplay.textContent = "Redirecting in " + timerSeconds + " seconds...";
-
-                if (timerSeconds <= 0) {
-                    clearInterval(countdownInterval);
-                    timerDisplay.style.display = "none";
-                    document.getElementById('proceed-btn').style.display = "block";  // Show the button after the countdown
-                }
-            }, 1000);
-        }
-
+    
+        let remainingSeconds = {{ timer_seconds }}; // Timer duration
+        const btn = document.getElementById('proceed-btn');
+    
         function redirectToURL() {
             const url = "{{ url }}";
             window.location.href = url;
         }
+    
+        function updateTimerDisplay() {
+            if (remainingSeconds > 0) {
+                btn.textContent = `Proceed to Website (${remainingSeconds} s)`;
+                remainingSeconds -= 1;
+            } else {
+                redirectToURL();
+                clearInterval(timerInterval);
+            }
+        }
+    
+        if({{ timer_enabled|tojson }}) {
+            const timerInterval = setInterval(updateTimerDisplay, 1000);
+        } else {
+            btn.textContent = "Proceed to Website";
+        }
     </script>
+    
 </body>
 
 </html>
