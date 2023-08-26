@@ -9,8 +9,8 @@ MONGO_URI = os.getenv('MONGO_URI')
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'urlshortenerdb')
 PORT = int(os.getenv('PORT', 8080))
 LANDING_PAGE_ENABLED = os.getenv('LANDING_PAGE', 'ON') == 'ON'
-TIMER_ENABLED = os.getenv('TIMER_ENABLED', 'OFF') == 'ON'
-TIMER_SECONDS = int(os.getenv('TIMER_SECONDS', 5))
+TIMER_ENABLED = os.getenv('TIMER_ENABLED', 'ON') == 'ON'
+TIMER_SECONDS = int(os.getenv('TIMER_SECONDS', 20))
 
 app = Quart(__name__, template_folder='static')
 
