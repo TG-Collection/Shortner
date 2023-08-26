@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <title>PrimeHub URL Shortener</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
@@ -15,9 +15,8 @@
     <div class="container-fluid h-100 bg-light">
         <div class="row h-100 justify-content-center align-items-center">
             <div class="col-md-6 col-lg-4 text-center shadow-lg p-4 rounded bg-white">
-                <h2 class="mb-4 display-5">You're almost there!</h2>
-                <p class="lead mb-4">You are about to be redirected to:</p>
-                <p class="mb-4 url-box" id="url">{{ url }}</p>
+                <h2 class="mb-4 display-5">PrimeHub URL Shortener</h2>
+                <p class="lead mb-4">You are about to be redirected.</p>
                 <p class="info-text"><strong>Creation Time:</strong> {{ creation_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                 <p class="info-text"><strong>Views:</strong> {{ views }}</p>
                 <p class="info-text">For support, contact <a href="mailto:support@primehub.com">support@primehub.com</a></p>
@@ -25,6 +24,9 @@
                 <button class="btn btn-primary btn-lg w-100" onclick="redirectToURL()">Proceed to Website</button>
             </div>
         </div>
+        <footer class="text-center mt-4">
+            <p>&copy; 2023 PrimeHub</p>
+        </footer>
     </div>
     <script>
         var timerEnabled = {{ "true" if timer_enabled else "false" }};
@@ -48,10 +50,10 @@
         });
 
         function redirectToURL() {
-            const url = document.getElementById('url').innerText;
+            const url = "{{ url }}";
             window.location.href = url;
         }
     </script>
 </body>
-
 </html>
+
