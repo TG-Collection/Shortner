@@ -1,21 +1,28 @@
-body {
+body, html {
+    height: 100%;
+    margin: 0;
     font-family: 'Arial', sans-serif;
     color: #333;
-    background: linear-gradient(120deg, #f6f9fc, #eef1f5);
+}
+
+.bg-gradient {
+    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+    height: 100%;
 }
 
 .info-text {
     color: #555;
 }
 
-footer {
-    color: #555;
-    padding-top: 20px;
-}
-
 .card {
     border-radius: 15px;
-    overflow: hidden;  // For the card header's color to properly follow the card's rounded corners
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.9);  // Semi-transparent white
+}
+
+footer {
+    color: #fff;
+    padding-top: 20px;
 }
 
 /* Animations */
