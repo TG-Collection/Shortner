@@ -5,7 +5,7 @@ import random
 import os
 import datetime
 
-MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
+MONGO_URI = os.getenv('MONGO_URI')
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'urlshortenerdb')
 PORT = int(os.getenv('PORT', 8080))
 LANDING_PAGE_ENABLED = os.getenv('LANDING_PAGE', 'OFF') == 'ON'
