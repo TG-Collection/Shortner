@@ -1,5 +1,4 @@
-from quart import Quart, request, jsonify, redirect, render_template
-from motor.motor_asyncio import AsyncIOMotorClient
+from quart import Quart, request, jsonify, redirect, send_from_directory
 import string
 import random
 import os
@@ -45,7 +44,7 @@ async def redirect_to_original(shortened_code):
     if document:
         original_url = document['original_url']
         if LANDING_PAGE_ENABLED:
-            return await render_template('landing_page.html', url=original_url)
+            return await send_from_directory('static', 'landing_page.html')
         return redirect(original_url)
     return jsonify(error="Shortened URL not found"), 404
 
