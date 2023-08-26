@@ -24,8 +24,9 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(45deg, #A8E6CF, #11999E);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             color: #333;
             overflow: hidden;
@@ -39,8 +40,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: float 3s infinite, springy 3s infinite alternate;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
         }
 
         h1 {
@@ -56,41 +56,6 @@
             line-height: 1.7;
             margin-bottom: 30px;
             color: #555;
-        }
-
-        /* Continuous Springy Effect */
-        @keyframes springy {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Continuous Floating Effect */
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
-        }
-
-        /* Extra styles for landing page */
-        .info {
-            margin-bottom: 20px;
-        }
-
-        .action {
-            margin-top: 20px;
         }
 
         .btn-primary {
@@ -109,7 +74,6 @@
             transform: scale(1);
         }
 
-        /* Responsive styles for mobile devices */
         @media only screen and (max-width: 600px) {
             .profile-container {
                 padding: 20px;
@@ -137,11 +101,14 @@
         <div class="info">
             <p><strong>Creation Time:</strong> {{ creation_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
             <p><strong>Views:</strong> {{ views }}</p>
-            <p>For support, contact <a href="mailto:support@primehub.com">support@primehub.com</a></p>
         </div>
         <div class="action">
-            <button id="proceed-btn" class="btn btn-primary" onclick="redirectToURL()">Proceed to Website</button>
+            <button id="proceed-btn" class="btn btn-primary">Proceed to Website</button>
         </div>
+    </section>
+
+    <section class="profile-container">
+        <p>For support, contact <a href="mailto:support@primehub.com">support@primehub.com</a></p>
     </section>
 
     <script>
@@ -186,15 +153,15 @@
             },
             retina_detect: true
         });
-    
-        let remainingSeconds = {{ timer_seconds }}; // Timer duration
+
+        let remainingSeconds = {{ timer_seconds }};
         const btn = document.getElementById('proceed-btn');
-    
+
         function redirectToURL() {
             const url = "{{ url }}";
             window.location.href = url;
         }
-    
+
         function updateTimerDisplay() {
             if (remainingSeconds > 0) {
                 btn.textContent = `Proceed to Website (${remainingSeconds} s)`;
@@ -204,14 +171,14 @@
                 clearInterval(timerInterval);
             }
         }
-    
+
         if({{ timer_enabled|tojson }}) {
             const timerInterval = setInterval(updateTimerDisplay, 1000);
         } else {
             btn.textContent = "Proceed to Website";
         }
     </script>
-    
 </body>
 
 </html>
+
