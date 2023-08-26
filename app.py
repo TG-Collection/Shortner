@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
+MONGO_URI = os.getenv('MONGO_URI', '')
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'urlshortenerdb')
 PORT = int(os.getenv('PORT', 8080))
 LANDING_PAGE_ENABLED = os.getenv('LANDING_PAGE', 'OFF') == 'ON'
@@ -48,6 +48,27 @@ async def redirect_to_original(shortened_code):
             return await render_template('landing_page.html', url=original_url)
         return redirect(original_url)
     return jsonify(error="Shortened URL not found"), 404
+
+@app.route('/revoke/', methods=['DELETE'])
+async def revoke_url():
+    data = await request.json
+
+    # Fetch the original or short URL from the request
+    original_url = data.get('original_url')
+    short_url = data.get('short_url')
+
+    if original_url:
+        result = await collection.delete_one({"original_url": original_url})
+    elif short_url:
+        result = await collection.delete_one({"short_url": short_url})
+    else:
+        return jsonify(message="Provide either the original URL or the short URL to revoke."), 400
+
+    if result.deleted_count > 0:
+        return jsonify(message="URL successfully revoked."), 200
+    else:
+        return jsonify(message="URL not found."), 404
+
 
 if __name__ == '__main__':
     app.run(port=PORT, debug=True)

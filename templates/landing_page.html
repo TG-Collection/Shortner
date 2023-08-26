@@ -1,13 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting...</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
+
 <body>
-    <h2>You are about to be redirected to:</h2>
-    <p id="url">{{ url }}</p>
-    <button class="button" onclick="redirectToURL()">Proceed</button>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <h2 class="mb-4">You're almost there!</h2>
+                <p>You are about to be redirected to:</p>
+                <p class="mb-4" id="url">{{ url }}</p>
+                <button class="btn btn-primary btn-lg" onclick="redirectToURL()">Proceed to Website</button>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
