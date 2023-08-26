@@ -10,20 +10,21 @@
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
 </head>
-
 <body class="bg-light">
     <div class="container d-flex h-100">
         <div class="row align-self-center w-100">
             <div class="col-md-6 mx-auto">
                 <div class="card shadow-lg animated fadeIn">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="card-title mb-0">PrimeHub URL Shortener</h2>
+                    </div>
                     <div class="card-body text-center p-5">
-                        <h2 class="card-title display-5 mb-4">PrimeHub URL Shortener</h2>
                         <p class="lead mb-4">You are about to be redirected.</p>
                         <p class="info-text"><strong>Creation Time:</strong> {{ creation_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                         <p class="info-text"><strong>Views:</strong> {{ views }}</p>
                         <p class="info-text">For support, contact <a href="mailto:support@primehub.com">support@primehub.com</a></p>
                         <p id="timer" class="mb-4"></p>
-                        <button class="btn btn-primary btn-lg w-100 animated pulse infinite" onclick="redirectToURL()">Proceed to Website</button>
+                        <button id="proceed-btn" class="btn btn-primary btn-lg w-100" onclick="redirectToURL()">Proceed to Website</button>
                     </div>
                 </div>
                 <footer class="text-center mt-4">
@@ -32,16 +33,16 @@
             </div>
         </div>
     </div>
-        <footer class="text-center mt-4">
-            <p>&copy; 2023 PrimeHub</p>
-        </footer>
-    </div>
+
     <script>
         var timerEnabled = {{ "true" if timer_enabled else "false" }};
         var timerSeconds = {{ timer_seconds }};
-        
+
         document.addEventListener("DOMContentLoaded", function() {
+            var proceedBtn = document.getElementById('proceed-btn');
+
             if (timerEnabled) {
+                proceedBtn.style.display = "none";  // Hide the button initially
                 var timerDisplay = document.getElementById('timer');
                 timerDisplay.textContent = "Redirecting in " + timerSeconds + " seconds...";
 
@@ -51,7 +52,8 @@
 
                     if (timerSeconds <= 0) {
                         clearInterval(countdownInterval);
-                        redirectToURL();
+                        timerDisplay.style.display = "none";
+                        proceedBtn.style.display = "block";  // Show the button after the countdown
                     }
                 }, 1000);
             }

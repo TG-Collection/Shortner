@@ -1,15 +1,21 @@
 body {
     font-family: 'Arial', sans-serif;
     color: #333;
+    background: linear-gradient(120deg, #f6f9fc, #eef1f5);
 }
 
 .info-text {
-    color: #777;
+    color: #555;
 }
 
 footer {
-    color: #777;
+    color: #555;
     padding-top: 20px;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;  // For the card header's color to properly follow the card's rounded corners
 }
 
 /* Animations */
@@ -27,24 +33,6 @@ footer {
 .animated.fadeIn {
     animation-name: fadeIn;
     animation-duration: 1s;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.animated.pulse {
-    animation-name: pulse;
-    animation-duration: 1.5s;
-    animation-iteration-count: infinite;
 }
 
 /* Transitions */
