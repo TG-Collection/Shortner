@@ -27,7 +27,7 @@ async def create_url():
     original_url = request.args.get('url')
     
     # Dynamically determine the domain
-    protocol = 'https' if request.scheme == 'https' else 'http'
+    protocol = 'https' if request.scheme == 'https' else 'https'
     domain = f"{protocol}://{request.headers.get('host', 'localhost')}"
     
     if create is not None and original_url:
@@ -50,7 +50,6 @@ async def create_url():
 
     return jsonify(message="Provide a URL to shorten."), 400
 
-
 @app.route('/<shortened_code>', methods=['GET'])
 async def redirect_to_original(shortened_code):
     document = await collection.find_one({"short_url": shortened_code})
@@ -69,10 +68,12 @@ async def redirect_to_original(shortened_code):
         return redirect(original_url)
     return jsonify(error="Shortened URL not found"), 404
 
-
 @app.route('/revoke/', methods=['DELETE'])
 async def revoke_url():
-    data = await request.json
+    data = await request.get_json()
+
+    if not data:
+        return jsonify(message="No data provided."), 400
 
     # Fetch the original or short URL from the request
     original_url = data.get('original_url')
@@ -89,7 +90,6 @@ async def revoke_url():
         return jsonify(message="URL successfully revoked."), 200
     else:
         return jsonify(message="URL not found."), 404
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=PORT, debug=True)
