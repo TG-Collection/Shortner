@@ -1,13 +1,15 @@
-from quart import Quart, request, jsonify, redirect, send_from_directory
+from quart import Quart, request, jsonify, redirect, render_template
 from motor.motor_asyncio import AsyncIOMotorClient
 import string
 import random
 import os
 
-MONGO_URI = os.getenv('MONGO_URI', '')
+MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'urlshortenerdb')
 PORT = int(os.getenv('PORT', 8080))
 LANDING_PAGE_ENABLED = os.getenv('LANDING_PAGE', 'OFF') == 'ON'
+TIMER_ENABLED = os.getenv('TIMER_ENABLED', 'OFF') == 'ON'
+TIMER_SECONDS = int(os.getenv('TIMER_SECONDS', 5))
 
 app = Quart(__name__)
 client = AsyncIOMotorClient(MONGO_URI)
@@ -41,7 +43,7 @@ async def redirect_to_original(shortened_code):
     if document:
         original_url = document['original_url']
         if LANDING_PAGE_ENABLED:
-            return await send_from_directory('static', 'landing_page.html')
+            return await render_template('landing_page.html', url=original_url, timer_enabled=TIMER_ENABLED, timer_seconds=TIMER_SECONDS)
         return redirect(original_url)
     return jsonify(error="Shortened URL not found"), 404
 

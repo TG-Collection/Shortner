@@ -6,9 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting...</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
 </head>
@@ -20,15 +18,37 @@
                 <h2 class="mb-4 display-5">You're almost there!</h2>
                 <p class="lead mb-4">You are about to be redirected to:</p>
                 <p class="mb-4 url-box" id="url">{{ url }}</p>
+                <p id="timer" class="mb-4"></p>
                 <button class="btn btn-primary btn-lg w-100" onclick="redirectToURL()">Proceed to Website</button>
             </div>
         </div>
     </div>
+    <script>
+        var timerEnabled = {{ "true" if timer_enabled else "false" }};
+        var timerSeconds = {{ timer_seconds }};
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            if (timerEnabled) {
+                var timerDisplay = document.getElementById('timer');
+                timerDisplay.textContent = "Redirecting in " + timerSeconds + " seconds...";
+
+                var countdownInterval = setInterval(function() {
+                    timerSeconds--;
+                    timerDisplay.textContent = "Redirecting in " + timerSeconds + " seconds...";
+
+                    if (timerSeconds <= 0) {
+                        clearInterval(countdownInterval);
+                        redirectToURL();
+                    }
+                }, 1000);
+            }
+        });
+
+        function redirectToURL() {
+            const url = document.getElementById('url').innerText;
+            window.location.href = url;
+        }
+    </script>
 </body>
-<footer class="footer mt-auto py-3 bg-dark text-white">
-    <div class="container text-center">
-        <span>© 2023 PrimeHub. All Rights Reserved.</span>
-    </div>
-</footer>
 
 </html>
