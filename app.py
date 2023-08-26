@@ -25,23 +25,30 @@ async def create_url():
     create = request.args.get('create')
     original_url = request.args.get('url')
     
+    # Dynamically determine the domain
+    protocol = 'https' if request.scheme == 'https' else 'http'
+    domain = f"{protocol}://{request.headers.get('host', 'localhost')}"
+    
     if create is not None and original_url:
         document = await collection.find_one({"original_url": original_url})
         
         if document:
-            return jsonify(original_url=document['original_url'], short_url=document['short_url']), 200
+            formatted_short_url = f"{domain}/{document['short_url']}"
+            return jsonify(original_url=document['original_url'], short_url=formatted_short_url), 200
 
-        short_url = generate_short_url()
+        short_url_code = generate_short_url()
         await collection.insert_one({
             "original_url": original_url,
-            "short_url": short_url,
+            "short_url": short_url_code,
             "creation_time": datetime.datetime.utcnow(),
             "views": 0
         })
 
-        return jsonify(original_url=original_url, short_url=short_url), 201
+        formatted_short_url = f"{domain}/{short_url_code}"
+        return jsonify(original_url=original_url, short_url=formatted_short_url), 201
 
     return jsonify(message="Provide a URL to shorten."), 400
+
 
 @app.route('/<shortened_code>', methods=['GET'])
 async def redirect_to_original(shortened_code):
