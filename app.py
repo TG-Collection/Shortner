@@ -3,6 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import string
 import random
 import os
+import datetime
 
 MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'urlshortenerdb')
@@ -31,7 +32,12 @@ async def create_url():
             return jsonify(original_url=document['original_url'], short_url=document['short_url']), 200
 
         short_url = generate_short_url()
-        await collection.insert_one({"original_url": original_url, "short_url": short_url})
+        await collection.insert_one({
+            "original_url": original_url,
+            "short_url": short_url,
+            "creation_time": datetime.datetime.utcnow(),
+            "views": 0
+        })
 
         return jsonify(original_url=original_url, short_url=short_url), 201
 
@@ -41,11 +47,20 @@ async def create_url():
 async def redirect_to_original(shortened_code):
     document = await collection.find_one({"short_url": shortened_code})
     if document:
+        await collection.update_one({"short_url": shortened_code}, {"$inc": {"views": 1}})
         original_url = document['original_url']
         if LANDING_PAGE_ENABLED:
-            return await render_template('landing_page.html', url=original_url, timer_enabled=TIMER_ENABLED, timer_seconds=TIMER_SECONDS)
+            return await render_template(
+                'landing_page.html',
+                url=original_url,
+                views=document["views"] + 1,  # Increment views for immediate display
+                creation_time=document["creation_time"],
+                timer_enabled=TIMER_ENABLED,
+                timer_seconds=TIMER_SECONDS
+            )
         return redirect(original_url)
     return jsonify(error="Shortened URL not found"), 404
+
 
 @app.route('/revoke/', methods=['DELETE'])
 async def revoke_url():

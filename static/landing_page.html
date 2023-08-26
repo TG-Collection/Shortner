@@ -18,6 +18,9 @@
                 <h2 class="mb-4 display-5">You're almost there!</h2>
                 <p class="lead mb-4">You are about to be redirected to:</p>
                 <p class="mb-4 url-box" id="url">{{ url }}</p>
+                <p class="info-text"><strong>Creation Time:</strong> {{ creation_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                <p class="info-text"><strong>Views:</strong> {{ views }}</p>
+                <p class="info-text">For support, contact <a href="mailto:support@primehub.com">support@primehub.com</a></p>
                 <p id="timer" class="mb-4"></p>
                 <button class="btn btn-primary btn-lg w-100" onclick="redirectToURL()">Proceed to Website</button>
             </div>
