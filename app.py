@@ -7,6 +7,7 @@ import random
 import os
 
 MONGO_URI = os.getenv('MONGO_URI')
+DOMAIN = os.getenv('DOMAIN')  # Set your actual domain here
 
 app = Quart(__name__)
 
@@ -17,11 +18,7 @@ collection = db['urls']
 
 async def generate_short_url():
     characters = string.ascii_letters + string.digits
-    while True:
-        short_url = ''.join(random.choice(characters) for _ in range(5))
-        existing_link = await collection.find_one({'short_url': short_url})
-        if not existing_link:
-            return short_url
+    return ''.join(random.choice(characters) for _ in range(5))
 
 @app.route('/')
 async def home():
@@ -42,15 +39,16 @@ async def shorten_url():
     else:
         return {'error': 'Method not allowed'}, 405
 
-    short_url = await generate_short_url()
+    short_code = await generate_short_url()
+    short_url = f'{DOMAIN}/{short_code}'
 
-    await collection.insert_one({'short_url': short_url, 'original_url': original_url})
+    await collection.insert_one({'short_code': short_code, 'original_url': original_url})
 
     return {'short_url': short_url}
 
-@app.route('/<short_url>')
-async def redirect_to_original(short_url):
-    link = await collection.find_one({'short_url': short_url})
+@app.route('/<short_code>')
+async def redirect_to_original(short_code):
+    link = await collection.find_one({'short_code': short_code})
 
     if link:
         original_url = link['original_url']
@@ -60,3 +58,4 @@ async def redirect_to_original(short_url):
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
+
