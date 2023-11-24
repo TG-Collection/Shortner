@@ -1,12 +1,12 @@
+# app.py
+
 from quart import Quart, request, jsonify, redirect
 from motor.motor_asyncio import AsyncIOMotorClient
 import string
 import random
 import os
 
-
 MONGO_URI = os.getenv('MONGO_URI')
-
 
 app = Quart(__name__)
 
@@ -15,7 +15,7 @@ client = AsyncIOMotorClient(MONGO_URI)
 db = client['url_shortener']
 collection = db['urls']
 
-def generate_short_url():
+async def generate_short_url():
     characters = string.ascii_letters + string.digits
     while True:
         short_url = ''.join(random.choice(characters) for _ in range(5))
@@ -54,6 +54,5 @@ async def redirect_to_original(short_url):
     else:
         return {'error': 'Short URL not found'}, 404
 
-
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port="8080", debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
