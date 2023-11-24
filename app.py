@@ -27,16 +27,20 @@ async def generate_short_url():
 async def home():
     return "URL Shortener API"
 
-@app.route('/shorten', methods=['POST'])
+@app.route('/shorten', methods=['POST', 'GET'])
 async def shorten_url():
-    data = await request.get_json()
-
-    if 'url' in data:
-        original_url = data['url']
-    elif 'url' in request.args:
-        original_url = request.args['url']
+    if request.method == 'POST':
+        data = await request.get_json()
+        if 'url' in data:
+            original_url = data['url']
+        else:
+            return {'error': 'Missing URL parameter'}, 400
+    elif request.method == 'GET':
+        original_url = request.args.get('url')
+        if not original_url:
+            return {'error': 'Missing URL parameter'}, 400
     else:
-        return {'error': 'Missing URL parameter'}, 400
+        return {'error': 'Method not allowed'}, 405
 
     short_url = await generate_short_url()
 
