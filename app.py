@@ -1,4 +1,4 @@
-from quart import Quart, request, jsonify, redirect
+from quart import Quart, request, jsonify, redirect, render_template
 from motor.motor_asyncio import AsyncIOMotorClient
 import string
 import random
@@ -33,7 +33,7 @@ async def get_or_generate_short_url(original_url):
 
 @app.route('/')
 async def home():
-    return "URL Shortener API"
+    return await render_template("index.html")
 
 @app.route('/shorten', methods=['POST', 'GET'])
 async def shorten_url():
