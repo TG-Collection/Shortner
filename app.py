@@ -1,8 +1,6 @@
 from quart import Quart, request, jsonify, redirect, render_template
 from motor.motor_asyncio import AsyncIOMotorClient
-import string
-import random
-import os
+import string, random, os
 
 MONGO_URI = os.getenv('MONGO_URI')
 DOMAIN = os.getenv('DOMAIN')
