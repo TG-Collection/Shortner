@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage URL Shortener</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #f4e9d5;
+            color: #3a3a3a;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .card {
+            background-color: #f8f3e8;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d0c8b0' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card h1 {
+            font-family: 'Special Elite', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #5c4b3f;
+        }
+
+        .card form {
+            margin-top: 1rem;
+        }
+
+        .card label {
+            font-size: 1.1rem;
+            color: #5c4b3f;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-align: left;
+        }
+
+        .card input {
+            width: calc(100% - 2.5rem);
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #c0b283;
+            border-radius: 4px;
+            font-size: 1rem;
+            color: #5c4b3f;
+            background-color: #f8f3e8;
+        }
+
+        .card .btn-primary {
+            background-color: #8b7355;
+            color: #f8f3e8;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            font-family: 'Special Elite', cursive;
+        }
+
+        .card .btn-primary:hover {
+            background-color: #6b5b44;
+        }
+
+        .card .btn-secondary {
+            background-color: #c0b283;
+            color: #f8f3e8;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 0.5rem;
+            transition: background-color 0.3s ease;
+            font-family: 'Special Elite', cursive;
+        }
+
+        .card .btn-secondary:hover {
+            background-color: #a69770;
+        }
+
+        .card .result {
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .card .result input {
+            width: calc(100% - 5rem);
+            margin-bottom: 0;
+            font-size: 1rem;
+            padding: 0.75rem;
+        }
+
+        footer {
+            background-color: #dcd0c0;
+            color: #5c4b3f;
+            text-align: center;
+            padding: 1rem;
+            font-family: 'Special Elite', cursive;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #5c4b3f;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1><i class="mdi mdi-link-variant"></i> URL Shortener</h1>
+            <form id="urlForm" class="space-y-6">
+                <label for="urlInput">
+                    <i class="mdi mdi-script-text-outline"></i> Enter your long URL
+                </label>
+                <input type="url" id="urlInput" required placeholder="https://example.com">
+                <button type="submit" class="btn-primary">
+                    <i class="mdi mdi-scissors-cutting"></i> Shorten URL
+                </button>
+            </form>
+            <div id="result" class="result hidden">
+                <h2><i class="mdi mdi-check-decagram"></i> Your shortened URL:</h2>
+                <div class="flex items-center">
+                    <input type="text" id="shortUrl" readonly>
+                    <button id="copyButton" class="btn-secondary">
+                        <i class="mdi mdi-content-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024: Made with <i class="mdi mdi-heart" style="color: #8b7355;"></i> by <a href="https://razi.dev" target="_blank" rel="noopener noreferrer">Razi</a></p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('urlForm');
+        const result = document.getElementById('result');
+        const shortUrlInput = document.getElementById('shortUrl');
+        const copyButton = document.getElementById('copyButton');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = document.getElementById('urlInput').value;
+
+            try {
+                const response = await fetch('/shorten', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to shorten URL');
+                }
+
+                const data = await response.json();
+                shortUrlInput.value = data.short_url;
+                result.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while shortening the URL. Please try again.');
+            }
+        });
+
+        copyButton.addEventListener('click', () => {
+            shortUrlInput.select();
+            document.execCommand('copy');
+            copyButton.innerHTML = '<i class="mdi mdi-check"></i> Copied!';
+            setTimeout(() => {
+                copyButton.innerHTML = '<i class="mdi mdi-content-copy"></i> Copy';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
