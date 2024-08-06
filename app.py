@@ -5,7 +5,7 @@ import random, os
 app = Quart(__name__)
 
 # MongoDB connection
-client = AsyncIOMotorClient(os.environ.get("MONGODB_URI"))
+client = AsyncIOMotorClient(os.getenv("MONGODB_URI"))
 db = client.link_shortener
 links_collection = db.links
 
@@ -64,4 +64,4 @@ async def redirect_to_url(short_code):
     return "Link not found", 404
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=os.getenv("PORT", 8080))
