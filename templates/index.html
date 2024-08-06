@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoji Link Shortener</title>
+    <title>Whitespace Link Shortener</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
@@ -83,14 +83,16 @@
             border-radius: 10px;
             word-break: break-all;
         }
-        .emoji-code {
-            font-size: 2.5rem;
+        .whitespace-code {
+            font-size: 1.2rem;
             margin: 1rem 0;
             background-color: #fff;
             padding: 0.5rem;
             border-radius: 10px;
             display: inline-block;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-family: monospace;
+            letter-spacing: 0.1em;
         }
         .short-url {
             display: flex;
@@ -133,7 +135,7 @@
 </head>
 <body>
     <div class="container">
-        <h1><i class="fas fa-link"></i> Emoji Link Shortener</h1>
+        <h1><i class="fas fa-link"></i> Whitespace Link Shortener</h1>
         <form method="POST">
             <div class="input-group">
                 <i class="fas fa-globe input-icon"></i>
@@ -144,8 +146,10 @@
         {% if short_url %}
         <div class="result">
             <p>Your shortened URL:</p>
-            <div class="emoji-code">
-                {{ short_url.split('/')[-1] }}
+            <div class="whitespace-code" title="Whitespace characters">
+                {% for char in short_code %}
+                    <span title="U+{{ '%04X' % ord(char) }}">{{ char }}</span>
+                {% endfor %}
             </div>
             <div class="short-url">
                 <a href="{{ short_url }}" target="_blank" id="shortUrl">{{ short_url }}</a>
