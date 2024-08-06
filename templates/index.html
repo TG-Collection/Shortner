@@ -4,71 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emoji Link Shortener</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            color: #333;
         }
         .container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             max-width: 400px;
-            width: 100%;
+            width: 90%;
         }
         h1 {
-            color: #333;
-            margin-bottom: 1rem;
+            color: #4a4a4a;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
         form {
             display: flex;
             flex-direction: column;
         }
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
         input[type="url"] {
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input[type="url"]:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #764ba2;
         }
         button {
-            padding: 0.5rem 1rem;
-            background-color: #4CAF50;
+            padding: 0.8rem 1.5rem;
+            background-color: #764ba2;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
+            font-size: 1rem;
+            font-weight: 600;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #663399;
+        }
+        button:active {
+            transform: scale(0.98);
         }
         .result {
-            margin-top: 1rem;
+            margin-top: 2rem;
+            background-color: #f0f0f0;
+            padding: 1rem;
+            border-radius: 10px;
             word-break: break-all;
         }
         .emoji-code {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin: 1rem 0;
-            background-color: #f0f2f5;
+            background-color: #fff;
             padding: 0.5rem;
-            border-radius: 4px;
+            border-radius: 10px;
             display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .short-url {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .short-url a {
+            flex-grow: 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            color: #764ba2;
+            text-decoration: none;
+        }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #764ba2;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.3rem 0.5rem;
+            margin-left: 0.5rem;
+        }
+        .copy-btn:hover {
+            color: #663399;
+        }
+        .copied-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Emoji Link Shortener</h1>
+        <h1><i class="fas fa-link"></i> Emoji Link Shortener</h1>
         <form method="POST">
-            <input type="url" name="url" placeholder="Enter your URL" required>
-            <button type="submit">Shorten</button>
+            <div class="input-group">
+                <i class="fas fa-globe input-icon"></i>
+                <input type="url" name="url" placeholder="Enter your URL" required>
+            </div>
+            <button type="submit"><i class="fas fa-magic"></i> Shorten</button>
         </form>
         {% if short_url %}
         <div class="result">
@@ -76,9 +147,31 @@
             <div class="emoji-code">
                 {{ short_url.split('/')[-1] }}
             </div>
-            <a href="{{ short_url }}" target="_blank">{{ short_url }}</a>
+            <div class="short-url">
+                <a href="{{ short_url }}" target="_blank" id="shortUrl">{{ short_url }}</a>
+                <button class="copy-btn" onclick="copyToClipboard()"><i class="fas fa-copy"></i></button>
+            </div>
         </div>
         {% endif %}
     </div>
+    <div class="copied-toast" id="copiedToast">Copied to clipboard!</div>
+
+    <script>
+        function copyToClipboard() {
+            var shortUrl = document.getElementById("shortUrl");
+            var tempInput = document.createElement("input");
+            tempInput.value = shortUrl.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            var toast = document.getElementById("copiedToast");
+            toast.style.display = "block";
+            setTimeout(function() {
+                toast.style.display = "none";
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
