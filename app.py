@@ -1,11 +1,11 @@
 from quart import Quart, request, render_template, redirect
 from motor.motor_asyncio import AsyncIOMotorClient
-import random
+import random, os
 
 app = Quart(__name__)
 
 # MongoDB connection
-client = AsyncIOMotorClient("mongodb://localhost:27017")
+client = AsyncIOMotorClient(os.environ.get("MONGODB_URI"))
 db = client.link_shortener
 links_collection = db.links
 
