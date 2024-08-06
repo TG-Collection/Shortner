@@ -1,6 +1,6 @@
 from quart import Quart, request, render_template, redirect
 from motor.motor_asyncio import AsyncIOMotorClient
-import random, os
+import random, os, string
 
 app = Quart(__name__)
 
@@ -9,19 +9,30 @@ client = AsyncIOMotorClient(os.getenv("MONGODB_URI"))
 db = client.link_shortener
 links_collection = db.links
 
-# List of emojis to use for short codes
-EMOJIS = [
-    "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙",
-    "😚", "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩", "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁",
-    "☹️", "😣", "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰",
-    "😥", "😓", "🤗", "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴",
-    "🤤", "😪", "😵", "🤐", "🥴", "🤢", "🤮", "🤧", "😷", "🤒", "🤕", "🤑", "🤠", "😈", "👿", "👹", "👺", "🤡", "💩",
-    "👻", "💀", "☠️", "👽", "👾", "🤖", "🎃", "😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿", "😾"
+# List of whitespace characters to use for short codes
+WHITESPACE_CHARS = [
+    '\u0020',  # Space
+    '\u00A0',  # No-Break Space
+    '\u1680',  # Ogham Space Mark
+    '\u2000',  # En Quad
+    '\u2001',  # Em Quad
+    '\u2002',  # En Space
+    '\u2003',  # Em Space
+    '\u2004',  # Three-Per-Em Space
+    '\u2005',  # Four-Per-Em Space
+    '\u2006',  # Six-Per-Em Space
+    '\u2007',  # Figure Space
+    '\u2008',  # Punctuation Space
+    '\u2009',  # Thin Space
+    '\u200A',  # Hair Space
+    '\u202F',  # Narrow No-Break Space
+    '\u205F',  # Medium Mathematical Space
+    '\u3000',  # Ideographic Space
 ]
 
-# Generate a random emoji short code
-def generate_short_code(length=4):
-    return ''.join(random.sample(EMOJIS, length))
+# Generate a random whitespace short code
+def generate_short_code(length=8):
+    return ''.join(random.choice(WHITESPACE_CHARS) for _ in range(length))
 
 async def get_unique_short_code():
     while True:
@@ -42,7 +53,7 @@ async def index():
         if existing_link:
             short_code = existing_link["short_code"]
         else:
-            # Generate a unique emoji short code
+            # Generate a unique whitespace short code
             short_code = await get_unique_short_code()
             
             # Store the link in the database
@@ -52,11 +63,11 @@ async def index():
             })
         
         short_url = request.host_url + short_code
-        return await render_template("index.html", short_url=short_url)
+        return await render_template("index.html", short_url=short_url, short_code=short_code)
     
     return await render_template("index.html")
 
-@app.route("/<short_code>")
+@app.route("/<path:short_code>")
 async def redirect_to_url(short_code):
     link = await links_collection.find_one({"short_code": short_code})
     if link:
